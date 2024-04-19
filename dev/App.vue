@@ -2,7 +2,7 @@
   <h1>
     Vue Form Validator
   </h1>
-  <form @submit="onSubmit" novalidate>
+  <form novalidate @submit="onSubmit">
     <div>
       <label for="usernameInput">
         Input with custom validation ('admin' username invalid)
@@ -13,7 +13,7 @@
         v-model="username"
         :minlength="3"
         @invalid="usernameValidator.onInvalid"
-      />
+      >
       <div v-if="usernameValidator.getInvalidMessage()" style="color: red;">
         {{ usernameValidator.getInvalidMessage() }}
       </div>
@@ -29,7 +29,7 @@
         type="text"
         required
         @invalid="postalCodeValidator.onInvalid"
-      />
+      >
       <div v-if="postalCodeValidator.getInvalidMessage()" style="color: red;">
         {{ postalCodeValidator.getInvalidMessage() }}
       </div>
@@ -45,12 +45,6 @@ import { useValidator } from '../src'
 import { ref, defineComponent } from 'vue'
 export default defineComponent({
   name: 'App',
-  data() {
-    return {
-      username: '',
-      postalCode: '',
-    }
-  },
   setup() {
     const usernameInputRef = ref(null)
     const postalCodeInputRef = ref(null)
@@ -62,6 +56,12 @@ export default defineComponent({
       postalCodeInputRef,
       usernameValidator,
       postalCodeValidator,
+    }
+  },
+  data() {
+    return {
+      username: '',
+      postalCode: '',
     }
   },
   methods: {
