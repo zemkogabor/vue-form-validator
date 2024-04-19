@@ -1,5 +1,5 @@
 {
-  "name": "vue-form-validator",
+  "name": "@zemkogabor/vue-form-validator",
   "version": "0.0.1",
   "description": "A lightweight Vue.js library that implements the JavaScript Constraint Validation API, offering advanced form validation with custom error messages and internationalization support.",
   "module": "./dist/vue-form-validator.js",
