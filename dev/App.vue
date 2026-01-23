@@ -56,7 +56,8 @@
 
 <script lang="ts">
 import { useValidator } from '../src'
-import {ref, defineComponent, type Ref} from 'vue'
+import { ref, defineComponent } from 'vue'
+
 export default defineComponent({
   name: 'App',
   setup() {

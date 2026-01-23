@@ -15,7 +15,7 @@ export function useValidator(
     badInputDate: string;
     patternMismatch: string;
     stepMismatch(nearestMin: number, nearestMax: number): string;
-  }
+  },
 ): {
   onInvalid: (event: Event) => void;
   getInvalidMessage: () => string | null;
