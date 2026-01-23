@@ -34,6 +34,20 @@
         {{ postalCodeValidator.getInvalidMessage() }}
       </div>
     </div>
+    <div>
+      <label for="inputMaxlengthInput">
+        Input with minlength validation (3)
+      </label>
+      <input
+        id="inputMaxlengthInput"
+        type="text"
+        minlength="3"
+        @invalid="usernameValidator.onInvalid"
+      >
+      <div v-if="usernameValidator.getInvalidMessage()" style="color: red;">
+        {{ usernameValidator.getInvalidMessage() }}
+      </div>
+    </div>
     <button type="submit">
       Submit
     </button>
@@ -42,14 +56,27 @@
 
 <script lang="ts">
 import { useValidator } from '../src'
-import { ref, defineComponent } from 'vue'
+import {ref, defineComponent, type Ref} from 'vue'
 export default defineComponent({
   name: 'App',
   setup() {
     const usernameInputRef = ref(null)
     const postalCodeInputRef = ref(null)
-    const usernameValidator = useValidator(usernameInputRef)
-    const postalCodeValidator = useValidator(postalCodeInputRef)
+    const messages = {
+      valueMissing: 'This field is required',
+      tooShort: (minLength: number) => `Please enter at least ${minLength} characters`,
+      tooLong: (maxLength: number) => `Please enter no more than ${maxLength} characters`,
+      rangeUnderflow: (min: string) => `Value must be at least ${min}`,
+      rangeOverflow: (max: string) => `Value must be at most ${max}`,
+      typeMismatchEmail: 'Please enter a valid email address',
+      typeMismatchUrl: 'Please enter a valid URL',
+      badInputNumber: 'Please enter a valid number',
+      badInputDate: 'Please enter a valid date',
+      patternMismatch: 'Please match the requested format',
+      stepMismatch: (nearestMin: number, nearestMax: number) => `Please enter a valid value. Nearest valid values are ${nearestMin} and ${nearestMax}`,
+    }
+    const usernameValidator = useValidator(usernameInputRef, messages)
+    const postalCodeValidator = useValidator(postalCodeInputRef, messages)
 
     return {
       usernameInputRef,

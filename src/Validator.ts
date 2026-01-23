@@ -1,9 +1,26 @@
 import { ref } from 'vue'
 import type { Ref } from 'vue'
-import { useI18n } from 'vue-i18n'
 
-export function useValidator(inputRef : Ref<HTMLInputElement | null>): { onInvalid: (event: Event) => void; getInvalidMessage: () => string | null; setCustomError: (data: string) => void } {
-  const { t } = useI18n()
+export function useValidator(
+  inputRef : Ref<HTMLInputElement | null>,
+  messages: {
+    valueMissing: string;
+    tooShort(minLength: number): string;
+    tooLong(maxLength: number): string;
+    rangeUnderflow(min: string): string;
+    rangeOverflow(max: string): string;
+    typeMismatchEmail: string;
+    typeMismatchUrl: string;
+    badInputNumber: string;
+    badInputDate: string;
+    patternMismatch: string;
+    stepMismatch(nearestMin: number, nearestMax: number): string;
+  }
+): {
+  onInvalid: (event: Event) => void;
+  getInvalidMessage: () => string | null;
+  setCustomError: (data: string) => void;
+} {
   const invalidMessage: Ref<string | null> = ref(null)
 
   /**
@@ -35,53 +52,53 @@ export function useValidator(inputRef : Ref<HTMLInputElement | null>): { onInval
    */
   function calcInvalidMessage(input : HTMLInputElement): string|null {
     if (input.validity.valueMissing) {
-      return t('validator.error.value_missing')
+      return messages.valueMissing
     }
 
     if (input.validity.tooShort) {
-      return t('validator.error.too_short', [input.minLength])
+      return messages.tooShort(input.minLength)
     }
 
     if (input.validity.tooLong) {
-      return t('validator.error.too_long', [input.maxLength])
+      return messages.tooLong(input.maxLength)
     }
 
     if (input.validity.rangeUnderflow) {
-      return t('validator.error.range_underflow', [input.min])
+      return messages.rangeUnderflow(input.min)
     }
 
     if (input.validity.rangeOverflow) {
-      return t('validator.error.range_overflow', [input.max])
+      return messages.rangeOverflow(input.max)
     }
 
     if (input.validity.typeMismatch) {
       if (input.type === 'email') {
-        return t('validator.error.type_mismatch.email')
+        return messages.typeMismatchEmail
       }
 
       if (input.type === 'url') {
-        return t('validator.error.type_mismatch.url')
+        return messages.typeMismatchUrl
       }
     }
 
     if (input.validity.badInput) {
       if (input.type === 'number') {
-        return t('validator.error.bad_input.number')
+        return messages.badInputNumber
       }
       if (input.type === 'date') {
-        return t('validator.error.bad_input.date')
+        return messages.badInputDate
       }
     }
 
     if (input.validity.patternMismatch) {
-      return t('validator.error.pattern_mismatch')
+      return messages.patternMismatch
     }
 
     if (input.validity.stepMismatch) {
       const nearestMin = Math.floor(Number(input.value) / Number(input.step)) * Number(input.step)
       const nearestMax = Math.ceil(Number(input.value) / Number(input.step)) * Number(input.step)
 
-      return t('validator.error.step_mismatch', [nearestMin, nearestMax])
+      return messages.stepMismatch(nearestMin, nearestMax)
     }
 
     if (input.validity.customError) {
