@@ -63,21 +63,8 @@ export default defineComponent({
   setup() {
     const usernameInputRef = ref(null)
     const postalCodeInputRef = ref(null)
-    const messages = {
-      valueMissing: 'This field is required',
-      tooShort: (minLength: number) => `Please enter at least ${minLength} characters`,
-      tooLong: (maxLength: number) => `Please enter no more than ${maxLength} characters`,
-      rangeUnderflow: (min: string) => `Value must be at least ${min}`,
-      rangeOverflow: (max: string) => `Value must be at most ${max}`,
-      typeMismatchEmail: 'Please enter a valid email address',
-      typeMismatchUrl: 'Please enter a valid URL',
-      badInputNumber: 'Please enter a valid number',
-      badInputDate: 'Please enter a valid date',
-      patternMismatch: 'Please match the requested format',
-      stepMismatch: (nearestMin: number, nearestMax: number) => `Please enter a valid value. Nearest valid values are ${nearestMin} and ${nearestMax}`,
-    }
-    const usernameValidator = useValidator(usernameInputRef, messages)
-    const postalCodeValidator = useValidator(postalCodeInputRef, messages)
+    const usernameValidator = useValidator(usernameInputRef)
+    const postalCodeValidator = useValidator(postalCodeInputRef)
 
     return {
       usernameInputRef,

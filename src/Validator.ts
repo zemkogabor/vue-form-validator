@@ -1,26 +1,26 @@
-import { ref } from 'vue'
+import { inject, ref } from 'vue'
 import type { Ref } from 'vue'
+import { VALIDATOR_CONFIG_KEY, type ValidatorConfig, type ValidatorMessages } from './validatorConfig'
 
-export function useValidator(
-  inputRef : Ref<HTMLInputElement | null>,
-  messages: {
-    valueMissing: string;
-    tooShort(minLength: number): string;
-    tooLong(maxLength: number): string;
-    rangeUnderflow(min: string): string;
-    rangeOverflow(max: string): string;
-    typeMismatchEmail: string;
-    typeMismatchUrl: string;
-    badInputNumber: string;
-    badInputDate: string;
-    patternMismatch: string;
-    stepMismatch(nearestMin: number, nearestMax: number): string;
-  },
-): {
+export function useValidator(inputRef : Ref<HTMLInputElement | null>): {
   onInvalid: (event: Event) => void;
   getInvalidMessage: () => string | null;
   setCustomError: (data: string) => void;
 } {
+  const injected = inject<ValidatorConfig | undefined>(
+    VALIDATOR_CONFIG_KEY,
+    undefined,
+  )
+
+  if (!injected || !injected.messages) {
+    throw new Error(
+      '[vue-form-validator] Validator messages are not provided. ' +
+      'Did you forget to call app.provide(VALIDATOR_CONFIG_KEY, ...)?',
+    )
+  }
+
+  const messages: ValidatorMessages = injected.messages
+
   const invalidMessage: Ref<string | null> = ref(null)
 
   /**
