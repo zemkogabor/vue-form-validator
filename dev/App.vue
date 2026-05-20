@@ -63,7 +63,9 @@ export default defineComponent({
   setup() {
     const usernameInputRef = ref(null)
     const postalCodeInputRef = ref(null)
-    const usernameValidator = useValidator(usernameInputRef)
+    const usernameValidator = useValidator(usernameInputRef, {
+      tooShort: (minLength: number) => `Username must be at least ${minLength} characters long`,
+    })
     const postalCodeValidator = useValidator(postalCodeInputRef)
 
     return {

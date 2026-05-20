@@ -14,6 +14,20 @@ export type ValidatorMessages = {
   stepMismatch(nearestMin: number, nearestMax: number): string;
 }
 
+export type CustomValidatorMessages = {
+  valueMissing?: string;
+  tooShort?(minLength: number): string;
+  tooLong?(maxLength: number): string;
+  rangeUnderflow?(min: string): string;
+  rangeOverflow?(max: string): string;
+  typeMismatchEmail?: string;
+  typeMismatchUrl?: string;
+  badInputNumber?: string;
+  badInputDate?: string;
+  patternMismatch?: string;
+  stepMismatch?(nearestMin: number, nearestMax: number): string;
+}
+
 export interface ValidatorConfig {
   messages: ValidatorMessages;
 }

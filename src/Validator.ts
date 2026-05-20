@@ -1,8 +1,13 @@
 import { inject, ref } from 'vue'
 import type { Ref } from 'vue'
-import { VALIDATOR_CONFIG_KEY, type ValidatorConfig, type ValidatorMessages } from './validatorConfig'
+import {
+  VALIDATOR_CONFIG_KEY,
+  type ValidatorConfig,
+  type ValidatorMessages,
+  type CustomValidatorMessages,
+} from './validatorConfig'
 
-export function useValidator(inputRef : Ref<HTMLInputElement | null>): {
+export function useValidator(inputRef : Ref<HTMLInputElement | null>, customMessages?: CustomValidatorMessages): {
   onInvalid: (event: Event) => void;
   getInvalidMessage: () => string | null;
   setCustomError: (data: string) => void;
@@ -19,7 +24,10 @@ export function useValidator(inputRef : Ref<HTMLInputElement | null>): {
     )
   }
 
-  const messages: ValidatorMessages = injected.messages
+  const messages: ValidatorMessages = {
+    ...injected.messages,
+    ...customMessages,
+  }
 
   const invalidMessage: Ref<string | null> = ref(null)
 
